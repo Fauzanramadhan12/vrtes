@@ -39,21 +39,19 @@
             animation__click="property: scale; to: 1.5 1.5 1.5; dur: 200; startEvents: click"
             animation__reset="property: scale; to: 1 1 1; dur: 200; startEvents: mouseleave">
         </a-image>
-
     </a-scene>
 
     <script>
-        // Ambil elemen logo
         let logo = document.querySelector("#logo");
+        let camera = document.querySelector("#camera");
+        let fov = 80; // Field of View awal
 
         // Event ketika logo diklik (navigasi ke halaman lain)
         logo.addEventListener("click", function () {
             window.location.href = "virtual_2.html"; // Redirect ke halaman lain
         });
 
-        // Zoom in & out dengan mouse scroll
-        let camera = document.querySelector("#camera");
-        let fov = 80; // Field of View awal
+        // Zoom dengan mouse scroll (untuk desktop)
         window.addEventListener("wheel", (event) => {
             if (event.deltaY > 0) {
                 fov = Math.min(fov + 2, 120); // Zoom out
@@ -62,6 +60,36 @@
             }
             camera.setAttribute("camera", "fov", fov);
         });
+
+        // Zoom dengan pinch di HP (touch event)
+        let touchStartDistance = 0;
+        window.addEventListener("touchstart", (event) => {
+            if (event.touches.length === 2) {
+                touchStartDistance = getTouchDistance(event.touches);
+            }
+        });
+
+        window.addEventListener("touchmove", (event) => {
+            if (event.touches.length === 2) {
+                let newDistance = getTouchDistance(event.touches);
+                if (touchStartDistance) {
+                    if (newDistance > touchStartDistance) {
+                        fov = Math.max(fov - 2, 30); // Zoom in
+                    } else {
+                        fov = Math.min(fov + 2, 120); // Zoom out
+                    }
+                    camera.setAttribute("camera", "fov", fov);
+                    touchStartDistance = newDistance;
+                }
+            }
+        });
+
+        // Fungsi untuk menghitung jarak antara dua jari
+        function getTouchDistance(touches) {
+            let dx = touches[0].clientX - touches[1].clientX;
+            let dy = touches[0].clientY - touches[1].clientY;
+            return Math.sqrt(dx * dx + dy * dy);
+        }
     </script>
 
 </body>

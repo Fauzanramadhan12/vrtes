@@ -30,7 +30,7 @@
 
         <!-- Logo yang bisa diklik -->
         <a-image 
-            id="logo"
+            id="muka"
             src="assets/images/muka.png"
             position="0 1.5 -3" 
             scale="1 1 1"
@@ -42,12 +42,12 @@
     </a-scene>
 
     <script>
-        let logo = document.querySelector("#muka");
+        let muka = document.querySelector("#muka");
         let camera = document.querySelector("#camera");
         let fov = 80; // Field of View awal
 
         // Event ketika logo diklik (navigasi ke halaman lain)
-        logo.addEventListener("click", function () {
+        muka.addEventListener("click", function () {
             window.location.href = "virtual_2.html"; // Redirect ke halaman lain
         });
 
